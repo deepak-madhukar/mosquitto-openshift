@@ -7,21 +7,16 @@ RUN addgroup -g 1000 mygroup && \
 
 WORKDIR /myuser
 
-# Copy configuration files
+# Copy files
 COPY config/mosquitto.conf /myuser/mosquitto.conf
-
-# Copy certificates
-COPY certs/ /myuser/certs/
-
-# Copy authentication files
+COPY certs/ /myuser/
 COPY auth/passwd /myuser/passwd
-
-# Copy startup scripts
 COPY scripts/start.sh /myuser/start.sh
+
+RUN chmod +x /myuser/start.sh
 
 USER myuser
 
 EXPOSE 1883 8883
 
-CMD ["/myuser/start.sh"]
-
+ENTRYPOINT ["/myuser/start.sh"]
